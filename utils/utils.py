@@ -32,7 +32,7 @@ class Endpoint:
         return requests.request(method, self.host(endpoint), data=data, params=params, headers={"Authorization": self.token})
 
     def post(self, endpoint, data=None):
-        return self.request(endpoint, json.dumps(data), "post")
+        return self.request(endpoint, json.dumps(data), method="post")
 
     def get(self, endpoint, params=None):
         return self.request(endpoint, params=params, method="get")

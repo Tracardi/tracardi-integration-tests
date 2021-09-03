@@ -3,6 +3,14 @@ from utils.utils import Endpoint
 endpoint = Endpoint()
 
 
+def create_resource(id):
+    resource = dict(
+        id=id,
+        type="mysql",
+        config={"host": "localhost"}
+    )
+    return endpoint.post('/resource', data=resource)
+
 def test_source_types_ok():
     result = endpoint.get('/resources/types')
     result = result.json()
@@ -20,21 +28,19 @@ def test_source_list_ok():
 
 
 def test_source_create_ok():
-    resource = dict(
-        id="1",
-        type="mysql",
-        config={"host": "localhost"}
-    )
-    result = endpoint.post('/resource', data=resource)
-    result = result.json()
-    assert result == {'saved': 1, 'errors': [], 'ids': ['1']}
+
+    id = "1"
+
+    response = create_resource(id)
+    result = response.json()
+    assert result == {'saved': 1, 'errors': [], 'ids': [id]}
 
     # refresh result and see if there is new data
     response = endpoint.get('/resources/refresh')
     assert response.status_code == 200
 
     # get new data
-    response = endpoint.get('/resource/1')
+    response = endpoint.get(f'/resource/{id}')
     assert response.status_code == 200
     result = response.json()
     assert result is not None
