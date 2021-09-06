@@ -1,6 +1,6 @@
 from time import sleep
 
-from test_source import create_resource
+from test_resource import create_resource
 from utils.utils import Endpoint
 
 endpoint = Endpoint()
