@@ -20,7 +20,7 @@ def test_track_payload():
         "session": {
             "id": str(uuid4())
         },
-        "events": [{"type": "page-view"}]
+        "events": [{"type": "page-view"}, {"type": "page-view", "options": {"save": False}}]
     }
 
     response = endpoint.post("/track", data=payload)
