@@ -3,13 +3,14 @@ from utils.utils import Endpoint
 endpoint = Endpoint()
 
 
-def create_resource(id):
+def create_resource(id, type):
     resource = dict(
         id=id,
-        type="mysql",
+        type=type,
         config={"host": "localhost"}
     )
     return endpoint.post('/resource', data=resource)
+
 
 def test_source_types_ok():
     result = endpoint.get('/resources/types')
@@ -28,10 +29,9 @@ def test_source_list_ok():
 
 
 def test_source_create_ok():
-
     id = "1"
 
-    response = create_resource(id)
+    response = create_resource(id, "mysql")
     result = response.json()
     assert result == {'saved': 1, 'errors': [], 'ids': [id]}
 

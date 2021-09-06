@@ -16,14 +16,14 @@ from tracardi.process_engine.action.v1.start_action import StartAction
 from tracardi_graph_runner.domain.flow_history import FlowHistory
 from tracardi_graph_runner.domain.work_flow import WorkFlow
 
-from tracardi_graph_runner.service.builders import node
+from tracardi_graph_runner.service.builders import action
 
 
 async def save():
-    start = node(InjectAction, {"a": 1})
-    read_profile = node(ReadProfileAction)
-    end1 = node(EndAction)
-    end2 = node(EndAction)
+    start = action(InjectAction, {"a": 1})
+    read_profile = action(ReadProfileAction)
+    end1 = action(EndAction)
+    end2 = action(EndAction)
 
     flow = Flow.build("test", id="1")
     flow += start('payload') >> read_profile('payload')

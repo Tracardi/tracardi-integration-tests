@@ -1,3 +1,17 @@
+from tracardi.process_engine.action.v1.debug_payload_action import DebugPayloadAction
+
+from tracardi.process_engine.action.v1.start_action import StartAction
+
+from tracardi.domain.flow import Flow
+
+from tracardi.process_engine.action.v1.end_action import EndAction
+
+from tracardi.process_engine.action.v1.read_profile_action import ReadProfileAction
+
+from tracardi.process_engine.action.v1.inject_action import InjectAction
+
+from tracardi_graph_runner.service.builders import action
+
 from utils.utils import Endpoint
 
 endpoint = Endpoint()
@@ -174,3 +188,31 @@ def test_flow_lock_enable():
     assert endpoint.delete(f'/flow/{id}').status_code == 200
 
 # todo flow delete deletes also rules.
+
+
+def test_flow_code_api():
+
+    id = '1'
+
+    # Add event
+
+    debug = action(DebugPayloadAction, {
+                "event": {
+                    "type": 'page-view',
+                }
+            })
+
+    start = action(StartAction)
+    read_profile = action(ReadProfileAction)
+    end = action(EndAction)
+
+    flow = Flow.build("Test wf as a code", id=id)
+    flow += debug('event') >> start('payload')
+    flow += start('payload') >> read_profile('payload')
+    flow += read_profile('profile') >> end('payload')
+
+    response = endpoint.post('/flow', data=flow.dict())
+    assert response.status_code == 200
+    result = response.json()
+    assert result['saved'] == 1
+    assert id in result['ids']

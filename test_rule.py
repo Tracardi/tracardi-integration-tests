@@ -32,7 +32,7 @@ def test_new_rule():
 
     # Add source
 
-    response = create_resource("1")
+    response = create_resource("1", "mysql")
     assert response.status_code == 200
 
     # Create rule with new source
