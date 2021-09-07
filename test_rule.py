@@ -32,8 +32,8 @@ def test_new_rule():
 
     # Add source
 
-    response = create_resource("1", "mysql")
-    assert response.status_code == 200
+    assert create_resource("1", "mysql").status_code == 200
+    assert endpoint.get('/resources/refresh').status_code == 200
 
     # Create rule with new source
 
