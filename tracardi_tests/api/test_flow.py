@@ -202,7 +202,7 @@ def test_flow_code_api():
     flow = Flow.build("Test wf as a code", id=id)
     flow += debug('event') >> start('payload')
     flow += start('payload') >> read_profile('payload')
-    flow += read_profile('profile') >> end('payload')
+    flow += read_profile('payload') >> end('payload')
 
     response = endpoint.post('/flow', data=flow.dict())
     assert response.status_code == 200

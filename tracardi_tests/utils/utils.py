@@ -21,7 +21,13 @@ class Endpoint:
         return "{} {}".format(data['token_type'], data['access_token'])
 
     def request(self, endpoint, data=None, params=None, method='POST'):
-        return requests.request(method, self.host(endpoint), data=data, params=params, headers={"Authorization": self.token})
+        return requests.request(
+            method,
+            self.host(endpoint),
+            data=data,
+            params=params,
+            timeout=180,
+            headers={"Authorization": self.token})
 
     def post(self, endpoint, data=None):
         return self.request(endpoint, json.dumps(data), method="post")
