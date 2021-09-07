@@ -12,17 +12,13 @@ from tracardi.domain.flow import Flow
 from tracardi.domain.profile import Profile
 from tracardi.domain.resource import Resource, ResourceRecord
 from tracardi.domain.session import Session
-from tracardi.service.storage.factory import StorageFor
+from tracardi.service.storage.factory import StorageFor, storage
 
 
 def test_storage():
     objects = [
         Session(id="1"),
         Profile(id="1"),
-        # Console(event_id="1", flow_id="1", origin="origin", type="type", class_name="classname", module="module", message="message")
-        # Entity,
-        # Event(id="1", type="test-event", source=Resource(id="1", type="test"), session=Session(id="1"),
-        #       context=Context()),
         Flow(**{
             "id": "1",
             "name": "name",
@@ -34,7 +30,6 @@ def test_storage():
             "draft": "",
             "lock": False
         }),
-        FlowActionPlugin(id="1", plugin=register()),  # todo may not be allowed without encoding
         # Resource(id="2", type="test"),  # todo moze nie byc wymagane
         ResourceRecord(id="2", type="test"),
         Rule(id="1", name="rule", event=Type(type="type"), flow=NamedEntity(id="1", name="flow")),
@@ -48,7 +43,7 @@ def test_storage():
     async def main():
         for instance in objects:
             db = StorageFor(instance).index()
-            print(db.domain_class_ref)
+            # print(db.domain_class_ref)
 
             result = await db.save()
             assert result.saved == 1
@@ -59,7 +54,7 @@ def test_storage():
 
         result = await StorageFor(Entity(id="1")).index("session").save({"properties": {"a": 1}})
         assert result.saved == 1
-        await asyncio.sleep(.2)
+        await storage('session').refresh()
         result = await StorageFor(Entity(id="1")).index("session").load(Session)
         assert result.properties == {"a": 1}
 

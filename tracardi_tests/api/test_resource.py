@@ -1,4 +1,4 @@
-from utils.utils import Endpoint
+from tracardi_tests.utils.utils import Endpoint
 
 endpoint = Endpoint()
 

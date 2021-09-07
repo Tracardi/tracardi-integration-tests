@@ -5,7 +5,7 @@ from tracardi.process_engine.action.v1.end_action import EndAction
 from tracardi.process_engine.action.v1.read_profile_action import ReadProfileAction
 from tracardi_graph_runner.service.builders import action
 
-from utils.utils import Endpoint
+from tracardi_tests.utils.utils import Endpoint
 
 endpoint = Endpoint()
 

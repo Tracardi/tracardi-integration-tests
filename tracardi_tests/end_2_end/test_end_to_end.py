@@ -7,15 +7,13 @@ from tracardi.domain.flow import Flow
 
 from tracardi.process_engine.action.v1.end_action import EndAction
 
-from tracardi.process_engine.action.v1.read_profile_action import ReadProfileAction
-
 from tracardi.process_engine.action.v1.start_action import StartAction
 
 from tracardi.process_engine.action.v1.debug_payload_action import DebugPayloadAction
 
-from test_resource import create_resource
+from tracardi_tests.api.test_resource import create_resource
 from tracardi_graph_runner.service.builders import action
-from utils.utils import Endpoint
+from tracardi_tests.utils.utils import Endpoint
 
 endpoint = Endpoint()
 
@@ -57,6 +55,7 @@ def test_source_rule_and_flow():
         "enabled": True
     })
     assert response.status_code == 200
+    assert endpoint.get('/rules/refresh').status_code == 200
 
     # Create flow
 
@@ -76,6 +75,7 @@ def test_source_rule_and_flow():
     flow += increase_views('payload') >> end('payload')
 
     assert endpoint.post('/flow', data=flow.dict()).status_code == 200
+    assert endpoint.get('/flows/refresh').status_code == 200
 
     segment_id = "segment-id"
 
@@ -85,10 +85,11 @@ def test_source_rule_and_flow():
         "condition": "profile@stats.views>0",
         "eventType": event_type
     }).status_code == 200
+    assert endpoint.get('/segments/refresh').status_code == 200
 
     # Assert rule
 
-    sleep(1)
+    sleep(.5)
     response = endpoint.get(f'/rule/{rule_id}')
     assert response.status_code == 200
     result = response.json()
@@ -115,6 +116,21 @@ def test_source_rule_and_flow():
     response = endpoint.post("/track", data=payload)
     assert response.status_code == 200
     result = response.json()
-    assert result['profile']['stats']['views'] == 1
-    assert 'test-segment' in result['profile']['segments']
+
+    # Get created profile
+
+    profile_id = result['profile']['id']
+
+    # Wait for data to populate
+
+    assert endpoint.get('/profiles/refresh').status_code == 200
+
+    # Get created profile
+
+    response = endpoint.get(f'/profile/{profile_id}')
+    assert response.status_code == 200
+    result = response.json()
+
+    assert result['stats']['views'] == 1
+    assert 'test-segment' in result['segments']
 

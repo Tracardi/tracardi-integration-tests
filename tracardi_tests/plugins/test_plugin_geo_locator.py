@@ -1,10 +1,8 @@
 import asyncio
 import os
-
 from dotenv import load_dotenv
-
-from test_resource import create_resource
 from tracardi_maxmind_geolite2.plugin import GeoIPAction
+from tracardi_tests.api.test_resource import create_resource
 
 load_dotenv()
 
