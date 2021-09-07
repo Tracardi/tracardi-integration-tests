@@ -3,12 +3,16 @@ from utils.utils import Endpoint
 endpoint = Endpoint()
 
 
-def create_resource(id, type, name="Test"):
+def create_resource(id, type, name="Test", config=None):
+
+    if config is None:
+        config = {}
+
     resource = dict(
         id=id,
         type=type,
         name=name,
-        config={"host": "localhost"}
+        config=config
     )
     return endpoint.post('/resource', data=resource)
 

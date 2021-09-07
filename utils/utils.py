@@ -5,14 +5,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-x = {
-    "access_token": "2e10d261eb29f8dcf1a6fd8dd50c15df04e7d69979f5387704799da8208788cd",
-    "token_type": "bearer",
-    "roles": [
-        "admin"
-    ]
-}
-
 
 class Endpoint:
 
