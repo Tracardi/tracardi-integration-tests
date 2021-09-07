@@ -1,5 +1,3 @@
-from dotty_dict import dotty
-
 from tracardi_dot_notation.dot_accessor import DotAccessor
 
 
