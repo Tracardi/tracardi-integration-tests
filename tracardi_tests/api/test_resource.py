@@ -17,17 +17,19 @@ def create_resource(id, type, name="Test", config=None):
     return endpoint.post('/resource', data=resource)
 
 
-def test_source_types_ok():
-    result = endpoint.get('/resources/types')
-    result = result.json()
+def test_source_types():
+    response = endpoint.get('/resources/types')
+    assert response.status_code == 200
+    result = response.json()
     if result:
         assert 'total' in result
         assert 'result' in result
 
 
-def test_source_list_ok():
-    result = endpoint.get('/resources')
-    result = result.json()
+def test_source_list():
+    response = endpoint.get('/resources')
+    assert response.status_code == 200
+    result = response.json()
     if result:
         assert 'total' in result
         assert 'result' in result
@@ -37,6 +39,7 @@ def test_source_create_ok():
     id = "1"
 
     response = create_resource(id, "mysql")
+    assert response.status_code == 200
     result = response.json()
     assert result == {'saved': 1, 'errors': [], 'ids': [id]}
 
