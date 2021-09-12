@@ -16,7 +16,8 @@ class Endpoint:
         return "{}:{}{}".format(os.environ['HOST'], os.environ['PORT'], path)
 
     def auth(self):
-        response = requests.post(self.host('/token'), {"username": os.environ['LOGIN'], "password": os.environ['PASS']})
+        response = requests.post(self.host('/token'),
+                                 {"username": os.environ['LOGIN'], "password": os.environ['PASS']})
         data = response.json()
         return "{} {}".format(data['token_type'], data['access_token'])
 

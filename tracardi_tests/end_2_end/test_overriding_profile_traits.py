@@ -22,9 +22,8 @@ endpoint = Endpoint()
 
 
 def test_source_rule_and_flow():
-
     source_id = 'source-id'
-    profile_id= str(uuid4())
+    profile_id = str(uuid4())
     flow_id_1 = "flow-id-1"
     rule_id_1 = "rule-id-1"
     flow_id_2 = "flow-id-2"
@@ -79,9 +78,9 @@ def test_source_rule_and_flow():
     debug = action(DebugPayloadAction, init={"event": {"type": event_type}})
     start = action(StartAction)
     copy_trait1 = action(CopyTraitAction, init={
-            "copy": {
-                "profile@traits.public.a": "event@properties.a"
-            }
+        "copy": {
+            "profile@traits.public.a": "event@properties.a"
+        }
     })
     append_trait = action(AppendTraitAction, init={
         "append": {
@@ -153,3 +152,13 @@ def test_source_rule_and_flow():
     response = endpoint.post("/track", data=payload)
     assert response.status_code == 200
     result = response.json()
+    assert result['profile']['stats']['visits'] == 1
+    assert result['profile']['stats']['views'] == 2
+    assert result['profile']['traits']['public']['a'] in [1, 2]
+    assert len(set(result['profile']['traits']['public']['b']).difference({1, 2})) == 0
+
+    profile_id = result['profile']['id']
+    assert endpoint.delete(f'/profile/{profile_id}').status_code == 200
+    assert endpoint.delete(f'/flow/{flow_id_1}').status_code == 200
+    assert endpoint.delete(f'/flow/{flow_id_2}').status_code == 200
+    assert endpoint.delete(f'/resource/{source_id}').status_code == 200
