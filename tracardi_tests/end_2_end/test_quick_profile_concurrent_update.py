@@ -100,11 +100,11 @@ def test_source_rule_and_flow():
     profile_id = result['profile']['id']
 
     start = time()
-    for x in range(0, 500):
+    for x in range(0, 50):
         loop.run_in_executor(executor, call, profile_id)
 
-    # result = call()
-    # assert endpoint.get('/profiles/refresh').status_code == 200
-    # print(result)
-    # assert result['profile']['stats']['views'] == 101
+    result = call(profile_id)
+    assert endpoint.get('/profiles/refresh').status_code == 200
+    # assert result['profile']['stats']['views'] == 51
     print(time() - start)
+
