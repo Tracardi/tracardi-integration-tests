@@ -5,7 +5,8 @@ import asyncio
 from tracardi.domain.profile import Profile
 
 from tracardi.domain.session import Session
-from tracardi.service.storage.factory import StorageFor, storage
+from tracardi.service.storage.driver import storage
+from tracardi.service.storage.factory import StorageFor
 
 from tracardi_tests.utils.utils import Endpoint
 
@@ -20,7 +21,7 @@ async def create_session(session_id, profile_id=None):
 
     result = await StorageFor(session).index().save()
     assert result.saved == 1
-    await storage('session').refresh()
+    await storage.driver.session.refresh()
     return result
 
 

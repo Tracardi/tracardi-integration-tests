@@ -134,3 +134,6 @@ def test_source_rule_and_flow():
     assert result['stats']['views'] == 1
     assert 'test-segment' in result['segments']
 
+    # Remove flow
+    assert endpoint.delete(f'/flow/{flow_id}').status_code == 200
+

@@ -1,7 +1,8 @@
 import asyncio
 from uuid import uuid4
 from tracardi.domain.profile import Profile
-from tracardi.service.storage.factory import StorageFor, storage
+from tracardi.service.storage.driver import storage
+from tracardi.service.storage.factory import StorageFor
 from tracardi_tests.utils.utils import Endpoint
 
 endpoint = Endpoint()
@@ -10,7 +11,7 @@ endpoint = Endpoint()
 async def create_profile(profile_id):
     result = await StorageFor(Profile(id=profile_id)).index().save()
     assert result.saved == 1
-    await storage('profile').refresh()
+    await storage.driver.profiles.refresh()
     return result
 
 

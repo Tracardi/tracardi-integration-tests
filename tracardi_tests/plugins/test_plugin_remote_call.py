@@ -2,14 +2,18 @@ import pytest
 
 from tracardi_remote_call.plugin import RemoteCallAction
 
+from tracardi_tests.utils.utils import Endpoint
+
 
 @pytest.mark.asyncio
 async def test_remote_call_ok():
+    endpoint = Endpoint()
     init = {
         "url": "http://localhost:8686/healthcheck",
         "method": "post",
         "timeout": 1,
         "headers": [
+            ("Authorization", endpoint.token),
             ("x-AAA", "test")
         ]
     }

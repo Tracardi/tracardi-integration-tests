@@ -21,6 +21,13 @@ def test_source_rule_and_flow():
     event_type = 'my-event'
     session_id = str(uuid4())
 
+    # Delete profile
+    assert endpoint.delete(f'/profile/{profile_id}').status_code in [200, 404]
+
+    # Delete flows and rules
+    # assert endpoint.delete(f'/rule/{rule_id_1}').status_code in [200, 404]
+    assert endpoint.delete(f'/flow/{flow_id_1}').status_code in [200, 404]
+
     # Create resource
     assert create_resource(source_id, type='web-page', name="End2End test").status_code == 200
     assert endpoint.get('/resources/refresh').status_code == 200
@@ -62,7 +69,7 @@ def test_source_rule_and_flow():
 
     # Send event
     start = time()
-    for x in range(0, 100):
+    for x in range(0, 10):
 
         payload = {
             "source": {
@@ -89,10 +96,17 @@ def test_source_rule_and_flow():
         assert response.status_code == 200
         result = response.json()
         profile_id = result['profile']['id']
+        print(profile_id, result['profile']['stats']['views'])
 
     response = endpoint.post("/track", data=payload)
     assert endpoint.get('/profiles/refresh').status_code == 200
     assert response.status_code == 200
     result = response.json()
-    assert result['profile']['stats']['views'] == 101
+    assert result['profile']['stats']['views'] == 11
     print(time() - start)
+
+    # Delete profile
+    assert endpoint.delete(f'/profile/{profile_id}').status_code in [200, 404]
+
+    # Delete flows and rules
+    assert endpoint.delete(f'/flow/{flow_id_1}').status_code in [200, 404]

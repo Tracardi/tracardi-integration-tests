@@ -6,13 +6,14 @@ from tracardi.domain.segment import Segment
 from tracardi.domain.named_entity import NamedEntity
 from tracardi.domain.type import Type
 from tracardi.domain.rule import Rule
-from tracardi.process_engine.action.v1.start_action import StartAction, register
+from tracardi.process_engine.action.v1.start_action import register
 from tracardi.domain.flow_action_plugin import FlowActionPlugin
 from tracardi.domain.flow import Flow
 from tracardi.domain.profile import Profile
-from tracardi.domain.resource import Resource, ResourceRecord
+from tracardi.domain.resource import  ResourceRecord
 from tracardi.domain.session import Session
-from tracardi.service.storage.factory import StorageFor, storage
+from tracardi.service.storage.driver import storage
+from tracardi.service.storage.factory import StorageFor
 
 
 def test_storage():
@@ -54,7 +55,7 @@ def test_storage():
 
         result = await StorageFor(Entity(id="1")).index("session").save({"properties": {"a": 1}})
         assert result.saved == 1
-        await storage('session').refresh()
+        await storage.driver.session.refresh()
         result = await StorageFor(Entity(id="1")).index("session").load(Session)
         assert result.properties == {"a": 1}
 

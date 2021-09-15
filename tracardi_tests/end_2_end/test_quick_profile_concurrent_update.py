@@ -21,90 +21,104 @@ def test_source_rule_and_flow():
     event_type = 'my-event'
     session_id = str(uuid4())
 
-    # Create resource
-    assert create_resource(source_id, type='web-page', name="End2End test").status_code == 200
-    assert endpoint.get('/resources/refresh').status_code == 200
+    try:
 
-    response = endpoint.post('/rule', data={
-        "id": rule_id_1,
-        "name": "Profile override rule-1",
-        "event": {
-            "type": event_type
-        },
-        "flow": {
-            "id": flow_id_1,
-            "name": "Profile override flow test"
-        },
-        "source": {
-            "id": source_id,
-            "name": "my source"
-        },
-        "enabled": True
-    })
 
-    assert response.status_code == 200
-    assert endpoint.get('/rules/refresh').status_code == 200
+        # Create resource
+        assert create_resource(source_id, type='web-page', name="End2End test").status_code == 200
+        assert endpoint.get('/resources/refresh').status_code == 200
 
-    # Create flows
-
-    debug = action(DebugPayloadAction, init={"event": {"type": event_type}})
-    start = action(StartAction)
-    increase_views = action(IncreaseViewsAction)
-    end = action(EndAction)
-
-    flow = Flow.build("Profile quick update - test", id=flow_id_1)
-    flow += debug('event') >> start('payload')
-    flow += start('payload') >> increase_views('payload')
-    flow += increase_views('payload') >> end('payload')
-
-    assert endpoint.post('/flow', data=flow.dict()).status_code == 200
-    assert endpoint.get('/flows/refresh').status_code == 200
-
-    # Send event
-    loop = asyncio.get_event_loop()
-    executor = concurrent.futures.ThreadPoolExecutor(
-        max_workers=100,
-    )
-
-    def call(profile_id):
-        payload = {
+        response = endpoint.post('/rule', data={
+            "id": rule_id_1,
+            "name": "Profile override rule-1",
+            "event": {
+                "type": event_type
+            },
+            "flow": {
+                "id": flow_id_1,
+                "name": "Profile override flow test"
+            },
             "source": {
-                "id": source_id
+                "id": source_id,
+                "name": "my source"
             },
-            "session": {
-                "id": session_id
-            },
-            "profile": {
-                "id": profile_id
-            },
-            "events": [{
-                "type": event_type,
-                "properties": {
-                    "a": 1,
-                    "b": 2
-                },
-                "options": {"save": True}
-            }],
-            "options": {"profile": True}
-        }
+            "enabled": True
+        })
 
-        response = endpoint.post("/track", data=payload)
         assert response.status_code == 200
-        result = response.json()
-        print(f"{result['profile']['id']}, {result['profile']['stats']['views']}")
-        return result
+        assert endpoint.get('/rules/refresh').status_code == 200
 
-    # create profile_id
-    result = call("none")
-    assert endpoint.get('/profiles/refresh').status_code == 200
-    profile_id = result['profile']['id']
+        # Create flows
 
-    start = time()
-    for x in range(0, 50):
-        loop.run_in_executor(executor, call, profile_id)
+        debug = action(DebugPayloadAction, init={"event": {"type": event_type}})
+        start = action(StartAction)
+        increase_views = action(IncreaseViewsAction)
+        end = action(EndAction)
 
-    result = call(profile_id)
-    assert endpoint.get('/profiles/refresh').status_code == 200
-    # assert result['profile']['stats']['views'] == 51
-    print(time() - start)
+        flow = Flow.build("Profile quick update - test", id=flow_id_1)
+        flow += debug('event') >> start('payload')
+        flow += start('payload') >> increase_views('payload')
+        flow += increase_views('payload') >> end('payload')
+
+        assert endpoint.post('/flow', data=flow.dict()).status_code == 200
+        assert endpoint.get('/flows/refresh').status_code == 200
+
+        # Send event
+
+
+        def call(profile_id):
+            payload = {
+                "source": {
+                    "id": source_id
+                },
+                "session": {
+                    "id": session_id
+                },
+                "profile": {
+                    "id": profile_id
+                },
+                "events": [{
+                    "type": event_type,
+                    "properties": {
+                        "a": 1,
+                        "b": 2
+                    },
+                    "options": {"save": True}
+                }],
+                "options": {"profile": True}
+            }
+
+            response = endpoint.post("/track", data=payload)
+            assert response.status_code == 200
+            result = response.json()
+            print(f"{result['profile']['id']}, {result['profile']['stats']['views']}")
+            return result
+
+        # create profile_id
+        result = call("none")
+        assert endpoint.get('/profiles/refresh').status_code == 200
+        profile_id = result['profile']['id']
+
+        loop = asyncio.get_event_loop()
+        executor = concurrent.futures.ThreadPoolExecutor(
+            max_workers=100,
+        )
+        start = time()
+        coros = []
+        for x in range(0, 20):
+            coros.append(loop.run_in_executor(executor, call, profile_id))
+
+        loop.run_until_complete(asyncio.gather(*coros))
+
+        result = call(profile_id)
+        assert endpoint.get('/profiles/refresh').status_code == 200
+        assert result['profile']['stats']['views'] == 22
+        print(time() - start)
+
+    finally:
+        # Delete profile
+        assert endpoint.delete(f'/profile/{profile_id}').status_code in [200, 404]
+
+        # Delete flows and rules
+        assert endpoint.delete(f'/flow/{flow_id_1}').status_code in [200, 404]
 

@@ -1,6 +1,8 @@
 from uuid import uuid4
 import asyncio
-from tracardi.service.storage.factory import storage
+
+from tracardi.service.storage.driver import storage
+
 from tracardi_tests.api.test_resource import create_resource
 from tracardi_tests.api.test_session import create_session
 from tracardi_tests.api.test_profile import create_profile
@@ -120,8 +122,8 @@ async def session_not_exists_profile_not_exists():
 
     assert result['debugging']['session']['ids'][0] == session_id
 
-    await storage('session').refresh()
-    await storage('profile').refresh()
+    await storage.driver.session.refresh()
+    await storage.driver.profiles.refresh()
 
     assert endpoint.get(f'/session/{session_id}').status_code == 200  # Session exists
     assert endpoint.get(f'/profile/{new_profile_id}').status_code == 200  # Profile exists
