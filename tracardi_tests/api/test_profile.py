@@ -11,7 +11,7 @@ endpoint = Endpoint()
 async def create_profile(profile_id):
     result = await StorageFor(Profile(id=profile_id)).index().save()
     assert result.saved == 1
-    await storage.driver.profiles.refresh()
+    await storage.driver.profile.refresh()
     return result
 
 

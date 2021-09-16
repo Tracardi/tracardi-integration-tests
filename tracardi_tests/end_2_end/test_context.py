@@ -123,7 +123,7 @@ async def session_not_exists_profile_not_exists():
     assert result['debugging']['session']['ids'][0] == session_id
 
     await storage.driver.session.refresh()
-    await storage.driver.profiles.refresh()
+    await storage.driver.profile.refresh()
 
     assert endpoint.get(f'/session/{session_id}').status_code == 200  # Session exists
     assert endpoint.get(f'/profile/{new_profile_id}').status_code == 200  # Profile exists
