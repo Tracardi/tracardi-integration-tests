@@ -8,11 +8,11 @@ from tracardi.service.storage.driver import storage
 async def main():
     parser = Parser(Parser.read('grammar/filter_condition.lark'), start='expr')
 
-    tree = parser.parse("properties.Vacation==1")
-    # tree = parser.parse("(a.e < 1.3 OR (a.c < 1.3 AND a==1)) AND B==1")
+    # tree = parser.parse("id.c=\"1\"")
+    tree = parser.parse("B=\"1\"")
     # tree = parser.parse("a.e BETWEEN 1.3 AND 1 and c==1")
     x = FilterTransformer().transform(tree)
-    x = await storage.driver.event.search(x)
+    # x = await storage.driver.event.search(x)
     print(x)
 
 
