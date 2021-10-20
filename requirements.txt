@@ -11,6 +11,7 @@ git+https://github.com/Tracardi/tracardi-plugin-sdk.git
 git+https://github.com/Tracardi/tracardi-day-night-split.git
 git+https://github.com/Tracardi/tracardi-key-counter.git
 git+https://github.com/Tracardi/tracardi-url-parser.git
+git+https://github.com/Tracardi/tracardi-string-splitter.git
 
 git+https://github.com/Tracardi/tracardi-discord-webhook.git
 git+https://github.com/Tracardi/tracardi-mongodb-connector.git
