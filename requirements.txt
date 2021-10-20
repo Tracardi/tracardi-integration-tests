@@ -23,3 +23,4 @@ git+https://github.com/Tracardi/tracardi-remote-call.git
 git+https://github.com/Tracardi/tracardi-weather.git
 git+https://github.com/Tracardi/tracardi-zapier-webhook.git
 git+https://github.com/Tracardi/tracardi-event-scheduler.git
+git+https://github.com/Tracardi/tracardi-regex-validator.git
