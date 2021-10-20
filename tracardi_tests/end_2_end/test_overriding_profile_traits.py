@@ -1,4 +1,3 @@
-from time import sleep
 from uuid import uuid4
 
 from tracardi.process_engine.action.v1.increase_views_action import IncreaseViewsAction

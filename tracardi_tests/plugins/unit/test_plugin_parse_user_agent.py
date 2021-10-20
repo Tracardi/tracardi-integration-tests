@@ -5,7 +5,7 @@ from tracardi_plugin_sdk.service.plugin_runner import run_plugin
 
 def test_plugin_parse_user_agent():
     init = {
-        "userAgent": "session@context.userAgent",
+        "agent": "session@context.userAgent",
     }
 
     payload = {}

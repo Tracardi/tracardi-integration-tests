@@ -28,7 +28,7 @@ def test_new_rule():
     assert response.status_code == 422
 
     result = response.json()
-    assert result['detail'] == 'Missing source id: `string`'
+    assert result['detail'] == 'Incorrect source id: `string`'
 
     # Add source
 

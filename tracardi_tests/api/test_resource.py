@@ -18,7 +18,7 @@ def create_resource(id, type, name="Test", config=None):
 
 
 def test_source_types():
-    response = endpoint.get('/resources/types')
+    response = endpoint.get('/resources/type/name')
     assert response.status_code == 200
     result = response.json()
     if result:
