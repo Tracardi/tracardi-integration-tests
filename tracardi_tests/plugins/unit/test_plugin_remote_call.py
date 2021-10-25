@@ -15,23 +15,19 @@ async def test_remote_call_ok():
         "headers": [
             ("Authorization", endpoint.token),
             ("x-AAA", "test")
-        ]
+        ],
+        "body": {"type":"plain/text", "content": "test body"}
     }
 
     plugin = RemoteCallAction(**init)
 
-    payload = {
-        "test": {
-            "a": 1,
-            "b": [1, 2]
-        }
-    }
+    payload = {}
 
     results = await plugin.run(payload)
     response, error = results
 
     assert response.value['status'] == 200
-    assert response.value['content'] == payload
+    assert response.value['content'] == init['body']['content']
 
 
 @pytest.mark.asyncio
@@ -45,19 +41,15 @@ async def test_remote_call_invalid_cookie():
         ],
         "cookies": {"a": [
             "a"
-        ]}
+        ]},
+        "body":  {"type":"plain/text", "content": "test body"}
     }
 
     plugin = RemoteCallAction(**init)
 
-    payload = {
-        "test": {
-            "a": 1,
-            "b": [1, 2]
-        }
-    }
+    payload = {}
 
     try:
-        result = await plugin.run(payload)
+        await plugin.run(payload)
     except ValueError:
         assert True

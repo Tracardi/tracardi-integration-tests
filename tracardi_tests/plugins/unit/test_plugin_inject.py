@@ -1,10 +1,11 @@
+import json
 from tracardi.process_engine.action.v1.inject_action import InjectAction
 from tracardi.domain.profile import Profile
 from tracardi_plugin_sdk.service.plugin_runner import run_plugin
 
 
 def test_plugin_inject():
-    init = {"value": {"data": 1}}
+    init = {"value": json.dumps({"data": 1})}
 
     payload = {}
 
