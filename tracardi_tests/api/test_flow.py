@@ -2,7 +2,6 @@ from tracardi.process_engine.action.v1.debug_payload_action import DebugPayloadA
 from tracardi.process_engine.action.v1.start_action import StartAction
 from tracardi.domain.flow import Flow
 from tracardi.process_engine.action.v1.end_action import EndAction
-from tracardi.process_engine.action.v1.read_profile_action import ReadProfileAction
 from tracardi_graph_runner.service.builders import action
 
 from tracardi_tests.utils.utils import Endpoint
@@ -196,13 +195,11 @@ def test_flow_code_api():
             })
 
     start = action(StartAction)
-    read_profile = action(ReadProfileAction)
     end = action(EndAction)
 
     flow = Flow.build("Test wf as a code", id=id)
     flow += debug('event') >> start('payload')
-    flow += start('payload') >> read_profile('payload')
-    flow += read_profile('payload') >> end('payload')
+    flow += start('payload') >> end('payload')
 
     response = endpoint.post('/flow', data=flow.dict())
     assert response.status_code == 200
