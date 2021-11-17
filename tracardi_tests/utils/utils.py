@@ -38,3 +38,6 @@ class Endpoint:
 
     def delete(self, endpoint, data=None, params=None):
         return self.request(endpoint, json.dumps(data), params=params, method="delete")
+
+    def put(self, endpoint, params=None):
+        return self.request(endpoint, params=params, method="put")
