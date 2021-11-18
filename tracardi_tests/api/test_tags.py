@@ -4,14 +4,14 @@ from typing import List
 endpoint = Endpoint()
 
 
-def create_request(tags: List[str], event_type: str):
+def test_create_request(tags: List[str], event_type: str):
     return {
         "type": event_type,
         "tags": tags
     }
 
 
-def add():
+def test_add():
     request = create_request(["extag1", "extag2"], "integration-test-type")
     result = endpoint.post(f"/event/tag/add", request)
     assert result.status_code == 200
@@ -22,7 +22,7 @@ def add():
     assert "integration-test-type" in [doc["id"] for doc in result.json()]
 
 
-def delete_tags():
+def test_delete_tags():
     request = create_request(["extag1", "extag2"], "integration-test-type")
     result = endpoint.delete(f"/event/tag/delete", request)
     assert result.status_code == 200
@@ -33,7 +33,7 @@ def delete_tags():
     assert "integration-test-type" not in [doc["id"] for doc in result.json()]
 
 
-def delete_by_type():
+def test_delete_by_type():
     result = endpoint.delete(f"/event/tag/delete/{'integration-test-type'}")
     assert result.status_code == 200
     assert result.json()["deleted"] == 1
@@ -43,7 +43,7 @@ def delete_by_type():
     assert "integration-test-type" not in [doc["id"] for doc in result.json()]
 
 
-def update():
+def test_update():
     result = endpoint.put(f"/event/tag/type/{'integration-test-type'}")
     assert result.status_code == 200
 
@@ -53,9 +53,9 @@ def update():
 
 
 def test_tags_endpoint():
-    add()
-    delete_tags()
-    add()
-    delete_by_type()
-    add()
-    update()
+    test_add()
+    test_delete_tags()
+    test_add()
+    test_delete_by_type()
+    test_add()
+    test_update()
