@@ -26,7 +26,7 @@ session = Session(id="2")
 resource = Resource(id="3", type="event")
 context = Context()
 event = Event(id="event-id", type="type", source=resource, context=context, profile=profile, session=session)
-flow = Flow(id="flow-id", name="flow")
+flow = Flow(id="flow-id", name="flow", version=FlowSchema(version="0.g.0"))
 dot = DotAccessor(profile, session, payload, event, flow)
 
 parser = Parser(Parser.read('grammar/uql_expr.lark'), start='expr')

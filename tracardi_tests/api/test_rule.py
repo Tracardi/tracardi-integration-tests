@@ -46,7 +46,7 @@ def test_new_rule():
 
     # Check if flow was created
     sleep(1)
-    response = endpoint.get('/flow/flow_id')
+    response = endpoint.get('/flow/metadata/flow_id')
     assert response.status_code == 200
     result = response.json()
     assert result['id'] == 'flow_id'

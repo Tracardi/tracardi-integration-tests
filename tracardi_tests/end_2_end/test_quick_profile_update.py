@@ -64,7 +64,7 @@ def test_source_rule_and_flow():
     flow += start('payload') >> increase_views('payload')
     flow += increase_views('payload') >> end('payload')
 
-    assert endpoint.post('/flow', data=flow.dict()).status_code == 200
+    assert endpoint.post('/flow/production', data=flow.dict()).status_code == 200
     assert endpoint.get('/flows/refresh').status_code == 200
 
     # Send event

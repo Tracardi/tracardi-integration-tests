@@ -22,7 +22,7 @@ def create_flow(id, name, desc):
         "lock": False
     }
 
-    return endpoint.post('/flow', data=data)
+    return endpoint.post('/flow/metadata', data=data)
 
 
 def check_flow_bool(id, lock, type='lock', field='lock'):
@@ -37,7 +37,7 @@ def check_flow_bool(id, lock, type='lock', field='lock'):
     assert endpoint.get('/flow/metadata/refresh').status_code == 200
 
     # read flow
-    response = endpoint.get(f'/flow/{id}')
+    response = endpoint.get(f'/flow/metadata/{id}')
     assert response.status_code == 200
     if response.status_code == 200:
         result = response.json()
@@ -70,7 +70,7 @@ def test_add_flow_ok():
 
     # read saved flow
 
-    response = endpoint.get(f'/flow/{id}')
+    response = endpoint.get(f'/flow/metadata/{id}')
     assert response.status_code == 200
     if response.status_code == 200:
         result = response.json()
@@ -83,8 +83,10 @@ def test_add_flow_ok():
         # flush data to elastic
         assert endpoint.get('/flow/metadata/refresh').status_code == 200
 
+        # response = endpoint.get(f'/flow/metadata/{id}')
+        # print(response.content)
         # check if do not exist
-        assert endpoint.get(f'/flow/{id}').status_code == 404
+        assert endpoint.get(f'/flow/metadata/{id}').status_code == 404
 
 
 def test_get_flow_ok():
@@ -97,7 +99,9 @@ def test_get_flow_ok():
     assert endpoint.get('/flow/metadata/refresh').status_code == 200
 
     # check if do not exist
-    assert endpoint.get(f'/flow/{id}').status_code == 404
+    assert endpoint.get(f'/flow/draft/{id}').status_code == 404
+
+    assert endpoint.get(f'/flow/production/{id}').status_code == 404
 
 
 def test_update_flow_metadata_ok():
@@ -118,7 +122,7 @@ def test_update_flow_metadata_ok():
     # flush data to elastic
     assert endpoint.get('/flow/metadata/refresh').status_code == 200
 
-    response = endpoint.get(f'/flow/{id}')
+    response = endpoint.get(f'/flow/production/{id}')
     assert response.status_code == 200
     if response.status_code == 200:
         result = response.json()
@@ -145,7 +149,7 @@ def test_update_flow_metadata_ok():
 
     # get updated flow
 
-    response = endpoint.get(f'/flow/{id}')
+    response = endpoint.get(f'/flow/metadata/{id}')
     assert response.status_code == 200
     if response.status_code == 200:
         result = response.json()
@@ -166,6 +170,8 @@ def test_flush_flow():
 
 def test_flow_lock_enable():
     id = '3'
+
+    assert endpoint.delete(f'/flow/{id}').status_code == 200
 
     # create flow
     response = create_flow(id, "Test flow", "Opis")
@@ -201,7 +207,7 @@ def test_flow_code_api():
     flow += debug('event') >> start('payload')
     flow += start('payload') >> end('payload')
 
-    response = endpoint.post('/flow', data=flow.dict())
+    response = endpoint.post('/flow/draft', data=flow.dict())
     assert response.status_code == 200
     result = response.json()
     assert result['saved'] == 1
