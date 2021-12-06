@@ -2,7 +2,7 @@ from tracardi_dot_notation.dot_accessor import DotAccessor
 from tracardi.domain.profile import Profile
 from tracardi.domain.context import Context
 from tracardi.domain.event import Event
-from tracardi.domain.flow import Flow
+from tracardi.domain.flow import Flow, FlowSchema
 from tracardi.domain.session import Session
 from tracardi.domain.resource import Resource
 from tracardi.process_engine.tql.parser import Parser
@@ -26,7 +26,7 @@ session = Session(id="2")
 resource = Resource(id="3", type="event")
 context = Context()
 event = Event(id="event-id", type="type", source=resource, context=context, profile=profile, session=session)
-flow = Flow(id="flow-id", name="flow", version=FlowSchema(version="0.g.0"))
+flow = Flow(id="flow-id", name="flow", wf_schema=FlowSchema(version="0.g.0"))
 dot = DotAccessor(profile, session, payload, event, flow)
 
 parser = Parser(Parser.read('grammar/uql_expr.lark'), start='expr')
@@ -166,6 +166,11 @@ def test_tql_false_date_ops():
     assert not ExprTransformer(dot=dot).transform(tree)
 
     tree = parser.parse("datetime(payload@a.i) between datetime(\"2022-01-01\") and datetime(\"2023-01-01\")")
+    assert not ExprTransformer(dot=dot).transform(tree)
+
+
+def test_tql_datetime_now():
+    tree = parser.parse("now() == now()")
     assert not ExprTransformer(dot=dot).transform(tree)
 
 

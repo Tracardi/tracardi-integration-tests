@@ -1,19 +1,13 @@
-from tracardi.domain.context import Context
-
-from tracardi.domain.entity import Entity
-
-from tracardi.domain.session import Session
-
-from tracardi.domain.event import Event
-
-from tracardi.domain.profile_traits import ProfileTraits
-
-from tracardi.domain.profile import Profile
-from tracardi_plugin_sdk.service.plugin_runner import run_plugin
-
-from tracardi_string_validator.plugin import StringValidatorAction
 import pytest
 import random
+from tracardi.domain.context import Context
+from tracardi.domain.entity import Entity
+from tracardi.domain.event import Event
+from tracardi.domain.profile import Profile
+from tracardi.domain.session import Session
+from tracardi.domain.profile_traits import ProfileTraits
+from tracardi_plugin_sdk.service.plugin_runner import run_plugin
+from tracardi_string_validator.plugin import StringValidatorAction
 
 
 @pytest.mark.email
@@ -28,7 +22,7 @@ def test_email():
     while not number == 10:
         a = random_char(12) + "@" + random_char(5) + "." + random_char(3)
         number += 1
-        init = {'validation_name': "email",
+        init = {'validator': "email",
                 'data': a}
         payload = {}
         plugin = run_plugin(StringValidatorAction, init, payload)
@@ -37,7 +31,7 @@ def test_email():
 
 
 def test_url():
-    init = {'validation_name': "url",
+    init = {'validator': "url",
             'data': f"https://www.polska.com/api/e/w/2"}
     plugin = run_plugin(StringValidatorAction, init, {})
     valid, invalid = plugin.output
@@ -56,7 +50,7 @@ def test_date():
             b = random.randint(1, 30)
         d = random.randint(1600, 2021)
         a += 1
-        init = {'validation_name': "date",
+        init = {'validator': "date",
                 'data': f"{b}-{c}-{d}"}
         plugin = run_plugin(StringValidatorAction, init, {})
         valid, invalid = plugin.output
@@ -68,7 +62,7 @@ def test_int():
     while not a == 1000:
         c = random.randint(1, 100000)
         a += 1
-        init = {'validation_name': "int",
+        init = {'validator': "int",
                 'data': c}
         plugin = run_plugin(StringValidatorAction, init, {})
         valid, invalid = plugin.output
@@ -80,7 +74,7 @@ def test_float():
     while not a == 1000:
         c = random.uniform(1.0, 100000.0)
         a += 1
-        init = {'validation_name': "float",
+        init = {'validator': "float",
                 'data': c}
         plugin = run_plugin(StringValidatorAction, init, {})
         valid, invalid = plugin.output
@@ -96,7 +90,7 @@ def test_timer():
             d = "0" + str(d)
 
         a += 1
-        init = {'validation_name': "time",
+        init = {'validator': "time",
                 'data': f"{c}:{d}"}
         plugin = run_plugin(StringValidatorAction, init, {})
         valid, invalid = plugin.output
@@ -105,7 +99,7 @@ def test_timer():
 
 def test_ean():
     a = "5901234123457"
-    init = {'validation_name': "ean",
+    init = {'validator': "ean",
             'data': a}
     plugin = run_plugin(StringValidatorAction, init, {})
     valid, invalid = plugin.output
@@ -123,7 +117,7 @@ def test_number_phone():
 
         c = random.randint(1000000, 999999999)
         a += 1
-        init = {'validation_name': "number_phone",
+        init = {'validator': "number_phone",
                 'data': f"{d}{c}"}
         plugin = run_plugin(StringValidatorAction, init, {})
 
@@ -140,7 +134,7 @@ def test_ip():
         d = random.randint(1, 255)
         e = random.randint(1, 255)
         a += 1
-        init = {'validation_name': "ipv4",
+        init = {'validator': "ipv4",
                 'data': f"{b}.{c}.{d}.{e}"}
         plugin = run_plugin(StringValidatorAction, init, {})
         valid, invalid = plugin.output
@@ -150,7 +144,7 @@ def test_ip():
 def test_string_validator_plugin():
     payload = {"data": "my@email.com"}
     init = {
-        'validation_name': 'email',
+        'validator': 'email',
         'data': "payload@data"
     }
 
@@ -162,7 +156,7 @@ def test_string_validator_plugin():
 
 def test_string_validator_plugin_fails():
     init = {"data": "event@id",
-            "validation_name": "time"}
+            "validator": "time"}
     payload = {}
     profile = Profile(id="profile-id", traits=ProfileTraits(public={"test": "new test"}))
     event = Event(id="event-id",
@@ -175,4 +169,3 @@ def test_string_validator_plugin_fails():
                         profile, None, event)
     valid, invalid = plugin.output
     assert valid.value is None
-
