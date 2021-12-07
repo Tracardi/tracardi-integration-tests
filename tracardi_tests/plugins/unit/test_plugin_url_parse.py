@@ -1,7 +1,6 @@
 import asyncio
-
-from tracardi_url_parser.plugin import ParseURLParameters
 from tracardi.domain.session import Session
+from tracardi.process_engine.action.v1.strings.url_parser.plugin import ParseURLParameters
 
 
 def test_plugin_url_parser_ok():

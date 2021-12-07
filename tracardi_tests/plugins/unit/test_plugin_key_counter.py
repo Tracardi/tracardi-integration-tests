@@ -3,10 +3,11 @@ from tracardi_key_counter.service.key_counter import KeyCounter
 from tracardi.domain.profile import Profile
 from tracardi_plugin_sdk.service.plugin_runner import run_plugin
 
-from tracardi_key_counter.plugin import KeyCounterAction
+from tracardi.process_engine.action.v1.metrics.key_counter.plugin import KeyCounterAction
 
 
 def test_key_counter():
+
     c = KeyCounter({"d": 1})
     c.count('a')
     c.count('b')
@@ -27,4 +28,4 @@ def test_key_counter_plugin():
     payload = {}
     profile = Profile(id="aaa")
     result = run_plugin(KeyCounterAction, init, payload, profile)
-    assert result.output.value == {'mobile': 2, 'desktop': 1}
+    assert result.profile.stats.counters['MobileVisits'] == {'mobile': 2, 'desktop': 1}

@@ -1,5 +1,6 @@
 from tracardi_plugin_sdk.service.plugin_runner import run_plugin
-from tracardi_string_splitter.plugin import SplitterAction
+
+from tracardi.process_engine.action.v1.strings.string_splitter.plugin import SplitterAction
 
 
 def test_string_splitter_plugin():

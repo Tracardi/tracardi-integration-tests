@@ -24,6 +24,7 @@ def test_event_scheduler():
         context={},
         source=Entity(id='d94ffd0f-ee16-40f9-a81b-61893f20aa1f')
     )
+    print(event)
     session = Session(
         id='1'
     )

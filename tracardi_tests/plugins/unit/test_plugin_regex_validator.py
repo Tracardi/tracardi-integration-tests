@@ -1,5 +1,6 @@
 from tracardi_plugin_sdk.service.plugin_runner import run_plugin
-from tracardi_regex_validator.plugin import RegexValidatorAction
+
+from tracardi.process_engine.action.v1.strings.regex_validator.plugin import RegexValidatorAction
 
 
 def test_regex_validator_plugin():

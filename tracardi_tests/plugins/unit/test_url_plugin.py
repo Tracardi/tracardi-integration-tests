@@ -1,6 +1,6 @@
 from tracardi_plugin_sdk.service.plugin_runner import run_plugin
-from tracardi_url_parser.plugin import ParseURLParameters
 from tracardi.domain.session import Session
+from tracardi.process_engine.action.v1.strings.url_parser.plugin import ParseURLParameters
 
 
 def test_url_plugin_fail():

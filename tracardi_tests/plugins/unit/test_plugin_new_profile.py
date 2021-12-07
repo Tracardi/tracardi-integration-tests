@@ -10,8 +10,8 @@ def test_plugin_new_profile_true():
     profile.operation.new = True
 
     result = run_plugin(NewProfileAction, init, payload, profile=profile)
-    assert result.output.value is True
-    assert result.output.port == 'TRUE'
+    assert result.output.value == payload
+    assert result.output.port == 'true'
 
 
 def test_plugin_new_profile_false():
@@ -21,5 +21,5 @@ def test_plugin_new_profile_false():
     profile.operation.new = False
 
     result = run_plugin(NewProfileAction, init, payload, profile=profile)
-    assert result.output.value is False
-    assert result.output.port == 'FALSE'
+    assert result.output.value == payload
+    assert result.output.port == 'false'

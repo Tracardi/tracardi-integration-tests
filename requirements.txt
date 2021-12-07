@@ -8,11 +8,6 @@ git+https://github.com/Tracardi/tracardi-wf.git@main
 git+https://github.com/Tracardi/tracardi-dot-notation.git
 
 git+https://github.com/Tracardi/tracardi-plugin-sdk.git
-git+https://github.com/Tracardi/tracardi-day-night-split.git
-git+https://github.com/Tracardi/tracardi-key-counter.git
-git+https://github.com/Tracardi/tracardi-url-parser.git
-git+https://github.com/Tracardi/tracardi-string-splitter.git
-git+https://github.com/Tracardi/tracardi-string-validator.git
 
 git+https://github.com/Tracardi/tracardi-discord-webhook.git
 git+https://github.com/Tracardi/tracardi-mongodb-connector.git
@@ -24,4 +19,3 @@ git+https://github.com/Tracardi/tracardi-remote-call.git
 git+https://github.com/Tracardi/tracardi-weather.git
 git+https://github.com/Tracardi/tracardi-zapier-webhook.git
 git+https://github.com/Tracardi/tracardi-event-scheduler.git
-git+https://github.com/Tracardi/tracardi-regex-validator.git

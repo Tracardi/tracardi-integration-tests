@@ -1,7 +1,6 @@
-import asyncio
 from datetime import datetime, timedelta
-
-from tracardi_local_timespan.plugin import LocalTimeSpanAction
+from tracardi_plugin_sdk.service.plugin_runner import run_plugin
+from tracardi.process_engine.action.v1.time.local_time_span.plugin import LocalTimeSpanAction
 
 
 def test_time_span_ok():
@@ -16,13 +15,10 @@ def test_time_span_ok():
 
     payload = {}
 
-    async def main():
-        plugin = LocalTimeSpanAction(**init)
-        result_true, result_false = await plugin.run(payload)
-        assert result_true.value is True
-        assert result_false.value is None
-
-    asyncio.run(main())
+    result = run_plugin(LocalTimeSpanAction, init, payload)
+    in_time, out_time = result.output
+    assert in_time.value is not None
+    assert out_time.value is None
 
 
 def test_time_span_fail():
@@ -34,10 +30,8 @@ def test_time_span_fail():
 
     payload = {}
 
-    async def main():
-        plugin = LocalTimeSpanAction(**init)
-        result_true, result_false = await plugin.run(payload)
-        assert result_true.value is None
-        assert result_false.value is True
+    result = run_plugin(LocalTimeSpanAction, init, payload)
+    in_time, out_time = result.output
+    assert in_time.value is None
+    assert out_time.value is not None
 
-    asyncio.run(main())

@@ -7,7 +7,8 @@ from tracardi.domain.profile import Profile
 from tracardi.domain.session import Session
 from tracardi.domain.profile_traits import ProfileTraits
 from tracardi_plugin_sdk.service.plugin_runner import run_plugin
-from tracardi_string_validator.plugin import StringValidatorAction
+
+from tracardi.process_engine.action.v1.strings.string_validator.plugin import StringValidatorAction
 
 
 @pytest.mark.email
