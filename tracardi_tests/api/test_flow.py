@@ -2,7 +2,7 @@ from tracardi.process_engine.action.v1.debug_payload_action import DebugPayloadA
 from tracardi.process_engine.action.v1.start_action import StartAction
 from tracardi.domain.flow import Flow
 from tracardi.process_engine.action.v1.end_action import EndAction
-from tracardi_graph_runner.service.builders import action
+from tracardi.service.wf.service.builders import action
 
 from tracardi_tests.utils.utils import Endpoint
 

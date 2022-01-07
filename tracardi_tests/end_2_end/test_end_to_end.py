@@ -12,7 +12,7 @@ from tracardi.process_engine.action.v1.start_action import StartAction
 from tracardi.process_engine.action.v1.debug_payload_action import DebugPayloadAction
 
 from tracardi_tests.api.test_resource import create_resource
-from tracardi_graph_runner.service.builders import action
+from tracardi.service.wf.service.builders import action
 from tracardi_tests.utils.utils import Endpoint
 
 endpoint = Endpoint()

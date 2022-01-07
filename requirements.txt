@@ -4,18 +4,17 @@ pytest-asyncio
 python-dotenv
 
 git+https://github.com/Tracardi/tracardi.git@master
-git+https://github.com/Tracardi/tracardi-wf.git@main
 git+https://github.com/Tracardi/tracardi-dot-notation.git
 
 git+https://github.com/Tracardi/tracardi-plugin-sdk.git
 
-git+https://github.com/Tracardi/tracardi-discord-webhook.git
-git+https://github.com/Tracardi/tracardi-mongodb-connector.git
-git+https://github.com/Tracardi/tracardi-mysql-connector.git
-git+https://github.com/Tracardi/tracardi-postgresql-connector.git
-git+https://github.com/Tracardi/tracardi-redshift-connector.git
-git+https://github.com/Tracardi/tracardi-rabbitmq-publisher.git
-git+https://github.com/Tracardi/tracardi-remote-call.git
-git+https://github.com/Tracardi/tracardi-weather.git
-git+https://github.com/Tracardi/tracardi-zapier-webhook.git
-git+https://github.com/Tracardi/tracardi-event-scheduler.git
+# git+https://github.com/Tracardi/tracardi-discord-webhook.git
+# git+https://github.com/Tracardi/tracardi-mongodb-connector.git
+# git+https://github.com/Tracardi/tracardi-mysql-connector.git
+# git+https://github.com/Tracardi/tracardi-postgresql-connector.git
+# git+https://github.com/Tracardi/tracardi-redshift-connector.git
+# git+https://github.com/Tracardi/tracardi-rabbitmq-publisher.git
+# git+https://github.com/Tracardi/tracardi-remote-call.git
+# git+https://github.com/Tracardi/tracardi-weather.git
+# git+https://github.com/Tracardi/tracardi-zapier-webhook.git
+# git+https://github.com/Tracardi/tracardi-event-scheduler.git
